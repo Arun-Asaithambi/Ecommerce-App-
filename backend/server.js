@@ -5,10 +5,14 @@ const mongoose = require ('mongoose');
 const Products = require ('./routes/router')
 dotenv.config({path:'config/config.env'});
 const errors = require("./middleware/errors");
+const Users = require("./routes/authRouter");
+const cookieParser = require("cookie-parser")
 
 
 app.use(express.json())
+app.use(cookieParser())
 app.use('/products',Products)
+app.use("/auth",Users)
 app.use(errors)  
 
 async function main(){
@@ -27,7 +31,7 @@ process.on("unhandledRejection", (err)=>{
     serevr.close(()=>{
         process.exit(1);
     })
-});
+});                     
 
 process.on("uncaughtException", (err)=>{
     console.log(`Error: ${err.message}`);

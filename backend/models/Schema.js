@@ -74,6 +74,13 @@ const productSchema = Schema({
         type:Number,
         default:0
     },
+    user:{
+        type:mongoose.Schema.Types.ObjectId 
+    },
+    createAt:{
+        type: Date,
+        default: Date.now
+    }
 
 })
 
