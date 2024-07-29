@@ -7,12 +7,13 @@ dotenv.config({path:'config/config.env'});
 const errors = require("./middleware/errors");
 const Users = require("./routes/authRouter");
 const cookieParser = require("cookie-parser")
-
+const Orders = require('./routes/orderRouter')
 
 app.use(express.json())
 app.use(cookieParser())
 app.use('/products',Products)
 app.use("/auth",Users)
+app.use("/order",Orders)
 app.use(errors)  
 
 async function main(){
