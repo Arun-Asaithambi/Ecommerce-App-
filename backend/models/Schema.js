@@ -57,10 +57,7 @@ const productSchema = Schema({
         required:[true, "please enter product stock"],
     },
     reviews:[{
-        name:{
-            type:String,
-            required: true
-        },
+        user:mongoose.Schema.Types.ObjectId,
         rating:{
             type:String,
             required: true
@@ -70,7 +67,7 @@ const productSchema = Schema({
             required: true
         }
     }], 
-    noReviews:{
+    numOfReviews:{
         type:Number,
         default:0
     },
