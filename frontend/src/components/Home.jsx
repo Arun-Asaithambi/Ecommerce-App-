@@ -1,47 +1,60 @@
-import {Fragment, useEffect} from "react";
+import {Fragment, useEffect, useState} from "react";
 import Title from "./layouts/Title";
 import { getProducts } from "../actions/productsActions";
 import { useDispatch, useSelector } from "react-redux";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
+import Loader from "./layouts/loader";
+import Product from "./product/product";
+import { toast } from "react-toastify";
+import Pagination from "react-js-pagination";
 
 function Home(){
     const dispatch = useDispatch();
-    const { loading, products } = useSelector((sate) => sate.productsState)
-    console.log(products)
+    const { loading, products, error, productsCount, resPerPage} = useSelector((state) => state.productsState);
+    const [currentPage, setCurrentPage] = useState(1);
+    
+    const setCurrentPageNo = (pageNo) =>{
+        setCurrentPage(pageNo)
+    }
+
     useEffect(() =>{
+        if(error){
+            return toast.error(error)
+        }
+        // ,{position:toast.POSITION.BOTTOM_CENTER}
+        // dispatch(getProducts(null, null, null, null, currentPage))
         dispatch(getProducts)
-    },[])
+    },[error, dispatch, currentPage])
 
     return (
         <Fragment>
-            <Title title={"All-Products"}/>
-                <section id="products" className="mt-5">
-                    <div className="container">
-                    {products && products.map(product =>(
-                    <div className="col-sm-12 col-md-6 col-lg-3 my-3">
-                    <div className="card p-3 rounded">
-                        <img className="card-img-top mx-auto" 
-                        src={product.images[0].image} />
-                        <div className="card-body d-flex flex-column">
-                            <h5 className="card-title">{product.name}</h5>
-                            <div className="ratings mt-auto">
-                                <div className="rating-outer">
-                                    <div className="rating-inner" style={{width: `${product.ratings/5 * 100}%`}}></div>
-                                </div>
-                                    <span className="no_of_reviews">
-                                        ({product.noReviews} Reviews)
-                                    </span>
-                                </div>
-                                <p className="card-text">${product.price}</p>
-                                <a className="btn btn-warning" role="button">View Details</a>
-                            </div>
-                        </div>
-
-                    </div>
-            ))}
-                    </div>
-                </section>
+            {loading ? <Loader/>: 
+            <Fragment>
+                <Title title={"All-Products"}/>
+                    <section id="products" className="container mt-5">
+                        <div className="row">
+                        {products && products.map(product =>(
+                        <Product key={product._id} product={product}/>
+                        ))}
+                        </div>  
+                    </section>
+                    {productsCount > 0 && productsCount > resPerPage ?
+                    <div className="d-flex justify-content-center mt-5">
+                           <Pagination 
+                                activePage={currentPage}
+                                onChange={setCurrentPageNo}
+                                totalItemsCount={productsCount}
+                                itemsCountPerPage={resPerPage}
+                                nextPageText={'Next'}
+                                firstPageText={'First'}
+                                lastPageText={'Last'}
+                                itemClass={'page-item'}
+                                linkClass={'page-link'}
+                           />     
+                    </div> : null }
+            </Fragment>
+            }
         </Fragment>
     )
 }

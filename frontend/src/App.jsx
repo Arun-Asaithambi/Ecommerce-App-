@@ -4,15 +4,23 @@ import Header from "./components/layouts/Header";
 import Footer from "./components/layouts/Footer";
 import Home from "./components/Home";
 import { HelmetProvider } from "react-helmet-async";
-import "./App.css"
+import "./App.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ProductDetails from "./components/product/productDetails";
+
 function App() {
   return (
     <div>
       <HelmetProvider>
         <Header/>
-          <Routes>
-            <Route path="/" element={<Home/>} />
-          </Routes>
+        <ToastContainer theme="dark" />
+          <div className="container container-fluid">
+            <Routes>
+              <Route path="/" element={<Home/>} />
+              <Route path="/product/:id" element={<ProductDetails/>} />
+            </Routes>
+          </div>
         <Footer/>
       </HelmetProvider>
     </div>

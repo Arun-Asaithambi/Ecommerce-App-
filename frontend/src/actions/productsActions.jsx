@@ -9,4 +9,4 @@ export const getProducts = async (dispatch)=>{
     }catch(error){
         dispatch(ProductsFailure(error.response.data.message))
     }
-}
+}   
