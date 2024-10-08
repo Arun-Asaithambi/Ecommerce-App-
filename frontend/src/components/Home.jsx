@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useState} from "react";
 import Title from "./layouts/Title";
-import { getProducts } from "../actions/productsActions";
+import { getProducts } from "../actions/productActions";
 import { useDispatch, useSelector } from "react-redux";
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
@@ -21,10 +21,8 @@ function Home(){
     useEffect(() =>{
         if(error){
             return toast.error(error)
-        }
-        // ,{position:toast.POSITION.BOTTOM_CENTER}
-        // dispatch(getProducts(null, null, null, null, currentPage))
-        dispatch(getProducts)
+        }// ,{position:toast.POSITION.BOTTOM_CENTER}
+        dispatch(getProducts(null,null,null,null, currentPage))
     },[error, dispatch, currentPage])
 
     return (
@@ -35,7 +33,7 @@ function Home(){
                     <section id="products" className="container mt-5">
                         <div className="row">
                         {products && products.map(product =>(
-                        <Product key={product._id} product={product}/>
+                        <Product col={3} key={product._id} product={product}/>
                         ))}
                         </div>  
                     </section>

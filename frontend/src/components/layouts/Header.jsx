@@ -1,38 +1,60 @@
-import Container from 'react-bootstrap/Container';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import Search from './search';
+import {useDispatch, useSelector} from 'react-redux';
+import {DropdownButton, Dropdown, Image} from 'react-bootstrap';
+import { logout } from '../../actions/userActions';
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
 import { FaAcquisitionsIncorporated } from "react-icons/fa";
 
-function Header(){
+export default function Header () {
+    const { isAuthenticated, user } = useSelector(state => state.authState);
+    // const { items:cartItems } = useSelector(state => state.cartState)
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const logoutHandler = () => {
+      dispatch(logout);
+    }
+
+
     return (
-        <Navbar expand="lg" className=" bg-secondary">
-        <Container>
-          <Navbar.Brand href="#home" className="fs-1 text-primary text"><FaAcquisitionsIncorporated />
+    <nav className="navbar row">
+        <div className="col-12 col-md-3">
+          <div className="navbar-brand">
+          <Navbar.Brand href="/home" className=" pl-5 fs-1 text-primary text"><FaAcquisitionsIncorporated />
           </Navbar.Brand>
-          <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-          </Form>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav" className="justify-content-end">
+            </div>
+        </div>
+  
+        <div className="col-12 col-md-6 mt-2 mt-md-0">
+           <Search/>
+        </div>
+  
+        <div className="col-12 col-md-3 mt-4 mt-md-0 text-center">
+          { isAuthenticated ? 
+            (
+              <Dropdown className='d-inline' >
+                  <Dropdown.Toggle variant='default text-white pr-5' id='dropdown-basic'>
+                    <figure className='avatar avatar-nav'>
+                      <Image width="50px" src={user.avatar??'./images/default_avatar.png'}  />
+                    </figure>
+                    <span>{user.name}</span>
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                      { user.role === 'admin' && <Dropdown.Item onClick={() => {navigate('admin/dashboard')}} className='text-dark'>Dashboard</Dropdown.Item> }
+                      <Dropdown.Item onClick={() => {navigate('/myprofile')}} className='text-dark'>Profile</Dropdown.Item>
+                      <Dropdown.Item onClick={() => {navigate('/orders')}} className='text-dark'>Orders</Dropdown.Item>
+                      <Dropdown.Item onClick={logoutHandler} className='text-danger'>Logout</Dropdown.Item>
+                  </Dropdown.Menu>
+              </Dropdown>
+            )
           
-            <Nav>
-              <Nav.Link href="#home">Login</Nav.Link>
-              <Nav.Link href="#link">Cart</Nav.Link>
-              
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
+          :
+            <Link to="/login"  className="btn" id="login_btn">Login</Link>
+          }
+          <Link to="/cart"><span id="cart" className="ml-3">Cart</span></Link>
+          {/* <span className="ml-1" id="cart_count">{cartItems.length}</span> */}
+        </div>
+    </nav>
     )
 }
-
-export default Header;

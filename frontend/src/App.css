@@ -131,7 +131,7 @@ footer {
 }
 
 .rating-outer::before {
-  content: '\2605 \2605 \2605 \2605 \2605 ';
+  content: '\f006 \f006 \f006 \f006 \f006';
 }
 
 .rating-inner {
@@ -144,7 +144,7 @@ footer {
 }
 
 .rating-inner::before {
-  content: '\f006 \f006 \f006 \f006 \f006';
+  content: '\f005 \f005 \f005 \f005 \f005';
   color: #f8ce0b;
 }
 
@@ -618,4 +618,4 @@ ul.CTAs a {
 .review_user {
   font-size: 0.8rem;
   color: grey;
-}   
+}
